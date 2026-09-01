@@ -1,0 +1,523 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --navy: #142b55;
+    --navy-dark: #0c2046;
+    --text: #111827;
+    --border: #a9a9a9;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--text);
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.navbar {
+    height: 122px;
+    background: #fff;
+    border-bottom: 1px solid #777;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4.2%;
+    position: relative;
+    z-index: 10;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+.brand-logo {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.nav-login,
+.submit-btn,
+.role-btn.primary {
+    border: 0;
+    background: var(--navy);
+    color: #fff;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 600;
+    border-radius: 999px;
+    transition: .2s ease;
+}
+
+.nav-login {
+    width: 150px;
+    height: 50px;
+}
+
+.nav-login:hover,
+.submit-btn:hover,
+.role-btn.primary:hover {
+    background: #0c2046;
+    transform: translateY(-1px);
+}
+
+.hero {
+    min-height: calc(100vh - 122px);
+    position: relative;
+    background: url('assets/loginbg.jpg') center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, .45);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 220px 25px 80px;
+    max-width: 1250px;
+}
+
+h1 {
+    margin: 0 0 35px;
+    color: var(--navy);
+    font-size: clamp(48px, 5.3vw, 70px);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -2px;
+}
+
+.subtitle {
+    margin: 0;
+    color: var(--navy);
+    font-size: clamp(22px, 2.2vw, 32px);
+    line-height: 1.4;
+}
+
+.features {
+    margin: 62px auto 0;
+    width: min(650px, 90vw);
+    display: grid;
+    gap: 14px;
+    text-align: left;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    color: var(--navy);
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.feature-icon {
+    flex: 0 0 62px;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: white;
+    display: grid;
+    place-items: center;
+    font-size: 34px;
+    font-weight: 400;
+}
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, .55);
+    backdrop-filter: blur(1px);
+}
+
+.modal-backdrop.active {
+    display: flex;
+}
+
+.modal {
+    width: min(595px, 94vw);
+    background: white;
+    border-radius: 27px;
+    padding: 28px 36px 42px;
+    position: relative;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, .3);
+}
+
+.small-modal {
+    width: min(595px, 94vw);
+    padding-bottom: 60px;
+}
+
+.modal h2 {
+    margin: 0 0 55px;
+    font-size: 25px;
+}
+
+.small-modal h2 {
+    margin-bottom: 56px;
+}
+
+.close-btn {
+    position: absolute;
+    right: 25px;
+    top: 19px;
+    border: 0;
+    background: transparent;
+    color: #222;
+    font-size: 42px;
+    line-height: 1;
+    font-weight: 200;
+    cursor: pointer;
+}
+
+.role-buttons {
+    display: grid;
+    gap: 30px;
+}
+
+.role-btn {
+    height: 62px;
+    width: 100%;
+    border-radius: 32px;
+    font-size: 22px;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.role-btn.secondary {
+    background: white;
+    border: 1px solid #aaa;
+    color: #222;
+}
+
+.role-btn.secondary:hover {
+    background: #f5f5f5;
+}
+
+.modal form {
+    display: grid;
+    gap: 13px;
+}
+
+.modal form label:not(.remember) {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 0;
+}
+
+.input-wrap {
+    height: 61px;
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    margin-bottom: 8px;
+}
+
+.input-icon {
+    width: 34px;
+    font-size: 27px;
+    color: #555;
+    text-align: center;
+}
+
+.input-wrap input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    font-size: 21px;
+    padding: 0 10px;
+    color: #333;
+    background: transparent;
+}
+
+.input-wrap input::placeholder {
+    color: #666;
+}
+
+.eye-btn {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-size: 20px;
+    color: #555;
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 17px;
+    margin: 2px 0 15px;
+}
+
+.remember input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--navy);
+}
+
+.submit-btn,
+.back-btn {
+    height: 62px;
+    width: 100%;
+    border-radius: 32px;
+    font-size: 21px;
+    cursor: pointer;
+}
+
+.submit-btn {
+    margin-bottom: 7px;
+}
+
+.back-btn {
+    background: white;
+    border: 1px solid #aaa;
+    color: #222;
+}
+
+.back-btn:hover {
+    background: #f5f5f5;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+@media (max-width: 700px) {
+    .navbar {
+        height: 88px;
+        padding: 0 20px;
+    }
+
+    .brand {
+        font-size: 22px;
+        gap: 12px;
+    }
+
+    .brand-logo {
+        width: 52px;
+        height: 52px;
+    }
+
+    .nav-login {
+        width: 105px;
+        height: 44px;
+        font-size: 17px;
+    }
+
+    .hero {
+        min-height: calc(100vh - 88px);
+    }
+
+    .hero-content {
+        padding-top: 120px;
+    }
+
+    .desktop-break {
+        display: none;
+    }
+
+    .feature {
+        font-size: 17px;
+        gap: 15px;
+    }
+
+    .feature-icon {
+        width: 48px;
+        height: 48px;
+        flex-basis: 48px;
+        font-size: 26px;
+    }
+
+    .modal {
+        padding: 25px 22px 32px;
+        border-radius: 22px;
+    }
+
+    .modal h2 {
+        margin-bottom: 35px;
+        font-size: 22px;
+    }
+
+    .modal form label:not(.remember) {
+        font-size: 18px;
+    }
+
+    .input-wrap {
+        height: 55px;
+    }
+
+    .input-wrap input {
+        font-size: 17px;
+    }
+}
+
+
+/* =========================
+   LOGIN ERROR POPUP
+   ========================= */
+
+.error-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    z-index: 1000;
+}
+
+.error-popup.show {
+    display: flex;
+}
+
+.error-popup-box {
+    position: relative;
+
+    width: min(400px, 90vw);
+
+    background: #fff;
+
+    border-radius: 20px;
+
+    padding: 35px 30px 30px;
+
+    text-align: center;
+
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+
+    animation: popupAppear 0.2s ease;
+}
+
+.error-icon {
+    width: 60px;
+    height: 60px;
+
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    background: #f44336;
+    color: white;
+
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.error-popup-box h3 {
+    margin: 0 0 10px;
+
+    color: #111827;
+
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.error-popup-box p {
+    margin: 0 0 25px;
+
+    color: #666;
+
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.error-ok {
+    width: 100%;
+    height: 50px;
+
+    border: 0;
+    border-radius: 25px;
+
+    background: var(--navy);
+    color: white;
+
+    font-size: 17px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.error-ok:hover {
+    background: var(--navy-dark);
+}
+
+.error-close {
+    position: absolute;
+
+    top: 10px;
+    right: 15px;
+
+    width: 35px;
+    height: 35px;
+
+    border: 0;
+    background: transparent;
+
+    color: #555;
+
+    font-size: 27px;
+    line-height: 35px;
+
+    cursor: pointer;
+}
+
+.error-close:hover {
+    color: #111;
+}
+
+@keyframes popupAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
