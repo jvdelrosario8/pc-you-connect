@@ -645,3 +645,25 @@ html[data-theme="dark"] .info-banner{ background:#1B2440; }
 .brand-logo svg {
   display: none;
 }
+
+/* ---------------- PAGE TRANSITIONS ----------------
+   Added for moving between Dashboard, Facilities and Lost & Found.
+   The sidebar stays still; only the main content fades and slides. */
+.main{
+  animation:pageEnter .35s ease both;
+}
+@keyframes pageEnter{
+  from{ opacity:0; transform:translateY(12px); }
+  to{ opacity:1; transform:none; }
+}
+body.page-leaving .main{
+  animation:pageLeave .22s ease forwards;
+}
+@keyframes pageLeave{
+  from{ opacity:1; transform:none; }
+  to{ opacity:0; transform:translateY(-8px); }
+}
+@media (prefers-reduced-motion: reduce){
+  .main,
+  body.page-leaving .main{ animation:none; }
+}

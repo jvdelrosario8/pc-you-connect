@@ -31,7 +31,7 @@ CREATE TABLE `adminlogincredentials` (
   `AdminID` int(11) DEFAULT NULL,
   `FirstName` varchar(50) DEFAULT NULL,
   `LastName` varchar(50) DEFAULT NULL,
-  `Password` varchar(50) DEFAULT NULL
+  `Password` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -51,7 +51,7 @@ CREATE TABLE `studentlogincredentials` (
   `StudentID` int(11) NOT NULL,
   `FirstName` varchar(50) DEFAULT NULL,
   `LastName` varchar(50) DEFAULT NULL,
-  `Password` varchar(50) DEFAULT NULL
+  `Password` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -60,6 +60,46 @@ CREATE TABLE `studentlogincredentials` (
 
 INSERT INTO `studentlogincredentials` (`StudentID`, `FirstName`, `LastName`, `Password`) VALUES
 (123456, 'admin', 'admin', 'admin');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `announcements`
+--
+
+CREATE TABLE `announcements` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `category` enum('important','event','maintenance','general') NOT NULL DEFAULT 'general',
+  `title` varchar(150) NOT NULL,
+  `content` text NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_announcements_created_at` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lost_found`
+--
+
+CREATE TABLE `lost_found` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `type` enum('lost','found') NOT NULL DEFAULT 'found',
+  `item_name` varchar(100) NOT NULL,
+  `category` varchar(50) NOT NULL DEFAULT 'Others',
+  `description` varchar(1000) DEFAULT NULL,
+  `location` varchar(100) DEFAULT NULL,
+  `status` enum('unclaimed','claimed','turned in') NOT NULL DEFAULT 'unclaimed',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_lost_found_created_at` (`created_at`),
+  KEY `idx_lost_found_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables

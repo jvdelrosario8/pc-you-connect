@@ -1,8 +1,14 @@
 <?php
 
-session_start();
+require_once 'db.php';
+require_once 'auth.php';
 
-require_once "db.php";
+start_app_session();
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: index.php');
+    exit;
+}
 
 $login_type = $_POST['login_type'] ?? '';
 
@@ -12,8 +18,13 @@ $login_type = $_POST['login_type'] ?? '';
 
 if ($login_type === 'student') {
 
-    $studentID = $_POST['studentID'] ?? '';
+    $studentID = trim($_POST['studentID'] ?? '');
     $password = $_POST['password'] ?? '';
+
+    if (!ctype_digit($studentID) || $password === '') {
+        header("Location: index.php?error=student_invalid");
+        exit;
+    }
 
     $sql = "SELECT * FROM StudentLoginCredentials WHERE StudentID = ?";
 
@@ -29,12 +40,12 @@ if ($login_type === 'student') {
 
         if (password_verify($password, $student['Password'])) {
 
-            $_SESSION['user_id'] = $student['StudentID'];
-            $_SESSION['role'] = 'student';
-
-            $_SESSION['StudentID'] = $student['StudentID'];
-            $_SESSION['FirstName'] = $student['FirstName'];
-            $_SESSION['LastName'] = $student['LastName'];
+            login_user(
+                (int) $student['StudentID'],
+                'student',
+                $student['FirstName'] ?? '',
+                $student['LastName'] ?? ''
+            );
 
             header("Location: dashboard.php");
             exit;
@@ -61,8 +72,13 @@ if ($login_type === 'student') {
 
 elseif ($login_type === 'admin') {
 
-    $adminID = $_POST['userID'] ?? '';
+    $adminID = trim($_POST['userID'] ?? '');
     $password = $_POST['password'] ?? '';
+
+    if (!ctype_digit($adminID) || $password === '') {
+        header("Location: index.php?error=admin_invalid");
+        exit;
+    }
 
     $sql = "SELECT * FROM adminlogincredentials WHERE AdminID = ?";
 
@@ -76,14 +92,28 @@ elseif ($login_type === 'admin') {
 
         $admin = $result->fetch_assoc();
 
-        if ($password === $admin['Password']) {
+        $storedPassword = (string) $admin['Password'];
+        $validPassword = password_verify($password, $storedPassword);
 
-            $_SESSION['user_id'] = $admin['AdminID'];
-            $_SESSION['role'] = 'admin';
+        // Upgrade old plaintext admin passwords after a successful login.
+        if (!$validPassword && hash_equals($storedPassword, $password)) {
+            $newHash = password_hash($password, PASSWORD_DEFAULT);
+            $update = $conn->prepare(
+                'UPDATE adminlogincredentials SET Password = ? WHERE AdminID = ?'
+            );
+            $update->bind_param('si', $newHash, $admin['AdminID']);
+            $update->execute();
+            $update->close();
+            $validPassword = true;
+        }
 
-            $_SESSION['AdminID'] = $admin['AdminID'];
-            $_SESSION['FirstName'] = $admin['FirstName'];
-            $_SESSION['LastName'] = $admin['LastName'];
+        if ($validPassword) {
+            login_user(
+                (int) $admin['AdminID'],
+                'admin',
+                $admin['FirstName'] ?? '',
+                $admin['LastName'] ?? ''
+            );
 
             header("Location: admin_dashboard.php");
             exit;
