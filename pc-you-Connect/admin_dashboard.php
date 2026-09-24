@@ -211,7 +211,7 @@ $fullName = trim($firstName . ' ' . $lastName);
           </div>
           <div class="announce-list">
 
-            <div class="announce-item">
+            <a href="announcements.php" class="announce-item" data-transition>
               <div class="announce-thumb">
                 <div class="thumb-inner">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -231,9 +231,9 @@ $fullName = trim($firstName . ' ' . $lastName);
                 <p class="announce-desc">The prelim examination schedule for all INFT courses has been finalized. Please
                   check your respective sections and reporting times.</p>
               </div>
-            </div>
+            </a>
 
-            <div class="announce-item">
+            <a href="announcements.php" class="announce-item" data-transition>
               <div class="announce-thumb">
                 <div class="thumb-inner">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -253,9 +253,9 @@ $fullName = trim($firstName . ' ' . $lastName);
                 <p class="announce-desc">Register your student organization for a booth at the annual Tech Fair
                   happening on October 15 at the PCU Gymnasium.</p>
               </div>
-            </div>
+            </a>
 
-            <div class="announce-item">
+            <a href="announcements.php" class="announce-item" data-transition>
               <div class="announce-thumb">
                 <div class="thumb-inner">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -275,7 +275,7 @@ $fullName = trim($firstName . ' ' . $lastName);
                 <p class="announce-desc">The main library will have limited operations due to scheduled HVAC
                   maintenance. Study areas on the 2nd floor remain open.</p>
               </div>
-            </div>
+            </a>
 
           </div>
         </div>

@@ -77,11 +77,12 @@ if ($result) {
           Lost &amp; Found
         </a>
       </li>
-      <li class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 11 18-5v12L3 14v-3z" stroke-linejoin="round"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
-        Announcements
+      <li>
+        <a href="announcements.php" class="nav-item active" data-transition>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 6l1.5 13a2 2 0 0 0 2 1.8h9a2 2 0 0 0 2-1.8L20 6M9 6V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V6"/><path d="M9.5 11.5h5"/></svg>
+          Announcements
+        </a>
       </li>
-    </ul>
 
     <div class="nav-section-label">ACCOUNT</div>
     <ul class="nav-list">
