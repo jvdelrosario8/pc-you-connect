@@ -78,8 +78,8 @@ if ($result) {
         </a>
       </li>
       <li>
-        <a href="announcements.php" class="nav-item active" data-transition>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 6l1.5 13a2 2 0 0 0 2 1.8h9a2 2 0 0 0 2-1.8L20 6M9 6V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V6"/><path d="M9.5 11.5h5"/></svg>
+        <a href="announcements.php" class="nav-item" data-transition>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 13 10 4V3L4 7v6Z"/><path d="M14 7.5 19 5v12l-5-2.5M4 13l-1 5h4l1-4"/></svg>
           Announcements
         </a>
       </li>
