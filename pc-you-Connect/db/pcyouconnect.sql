@@ -31,7 +31,8 @@ CREATE TABLE `adminlogincredentials` (
   `AdminID` int(11) DEFAULT NULL,
   `FirstName` varchar(50) DEFAULT NULL,
   `LastName` varchar(50) DEFAULT NULL,
-  `Password` varchar(255) DEFAULT NULL
+  `Password` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`AdminID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -51,7 +52,8 @@ CREATE TABLE `studentlogincredentials` (
   `StudentID` int(11) NOT NULL,
   `FirstName` varchar(50) DEFAULT NULL,
   `LastName` varchar(50) DEFAULT NULL,
-  `Password` varchar(255) DEFAULT NULL
+  `Password` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`StudentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -101,15 +103,54 @@ CREATE TABLE `lost_found` (
   KEY `idx_lost_found_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Indexes for dumped tables
---
+-- --------------------------------------------------------
 
 --
--- Indexes for table `studentlogincredentials`
+-- Table structure for table `facilities`
 --
-ALTER TABLE `studentlogincredentials`
-  ADD PRIMARY KEY (`StudentID`);
+
+CREATE TABLE `facilities` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(120) NOT NULL,
+  `location` varchar(120) NOT NULL,
+  `capacity` int(11) NOT NULL DEFAULT 1,
+  `status` enum('available','unavailable') NOT NULL DEFAULT 'available',
+  PRIMARY KEY (`id`),
+  KEY `idx_facilities_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `facilities` (`name`, `location`, `capacity`) VALUES
+('Audio Visual Room', 'Academic Building', 40),
+('Gymnasium', 'Main Campus', 250),
+('Elementary basketball court', 'Elementary Campus', 30),
+('JHS Basketball court', 'JHS Campus', 30),
+('7th Floor Conference room', '7th Floor', 80);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reservations`
+--
+
+CREATE TABLE `reservations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `facility_id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `time_start` time NOT NULL,
+  `time_end` time NOT NULL,
+  `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  `reviewed_by` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_reservations_status` (`status`),
+  KEY `idx_reservations_schedule` (`facility_id`,`date`,`time_start`,`time_end`),
+  CONSTRAINT `fk_reservations_facility` FOREIGN KEY (`facility_id`) REFERENCES `facilities` (`id`),
+  CONSTRAINT `fk_reservations_user` FOREIGN KEY (`user_id`) REFERENCES `studentlogincredentials` (`StudentID`),
+  CONSTRAINT `fk_reservations_admin` FOREIGN KEY (`reviewed_by`) REFERENCES `adminlogincredentials` (`AdminID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

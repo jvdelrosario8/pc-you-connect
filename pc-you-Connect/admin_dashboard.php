@@ -171,13 +171,6 @@ if ($recentLostFoundResult) {
     <main class="main">
 
       <div class="topbar">
-        <div class="search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="7" />
-            <path d="M21 21l-4.3-4.3" />
-          </svg>
-          Search anything...
-        </div>
         <div class="topbar-right">
           <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode" type="button">
             <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -222,7 +215,7 @@ if ($recentLostFoundResult) {
             </div>
             <span class="badge green">+100%</span>
           </div>
-          <div class="stat-number">4</div>
+          <div class="stat-number">5</div>
           <div class="stat-label">Active Facilities</div>
         </div>
 
@@ -383,7 +376,7 @@ if ($recentLostFoundResult) {
               </svg>
             </div>
             <div class="row-body">
-              <div class="row-title">7th Floor Conference Hall</div>
+              <div class="row-title">7th Floor Conference room</div>
               <div class="row-sub">Sept 4, 2026 • 9:00 AM – 12:00 PM</div>
             </div>
             <span class="pill upcoming">UPCOMING</span>
@@ -413,7 +406,7 @@ if ($recentLostFoundResult) {
               </svg>
             </div>
             <div class="row-body">
-              <div class="row-title">Audio-Visual Room</div>
+              <div class="row-title">Audio Visual Room</div>
               <div class="row-sub">Aug 20, 2026 • 10:00 AM – 12:00 PM</div>
             </div>
             <span class="pill completed">COMPLETED</span>
@@ -468,7 +461,7 @@ if ($recentLostFoundResult) {
         e.preventDefault();
         if (reduceMotion) { window.location.href = href; return; }
         document.body.classList.add('page-leaving');
-        setTimeout(function () { window.location.href = href; }, 220);
+        setTimeout(function () { window.location.href = href; }, 360);
       });
 
       // When coming back with the browser's Back button, show the page again.

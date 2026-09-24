@@ -366,7 +366,7 @@
     e.preventDefault();
     if (reduceMotion) { window.location.href = href; return; }
     document.body.classList.add('page-leaving');
-    setTimeout(function () { window.location.href = href; }, 220);
+    setTimeout(function () { window.location.href = href; }, 360);
   });
 
   // When coming back with the browser's Back button, show the page again.
