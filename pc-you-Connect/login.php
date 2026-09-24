@@ -38,7 +38,22 @@ if ($login_type === 'student') {
 
         $student = $result->fetch_assoc();
 
-        if (password_verify($password, $student['Password'])) {
+        $storedPassword = (string) $student['Password'];
+        $validPassword = password_verify($password, $storedPassword);
+
+        // Upgrade the sample/legacy plaintext password after a successful login.
+        if (!$validPassword && hash_equals($storedPassword, $password)) {
+            $newHash = password_hash($password, PASSWORD_DEFAULT);
+            $update = $conn->prepare(
+                'UPDATE studentlogincredentials SET Password = ? WHERE StudentID = ?'
+            );
+            $update->bind_param('si', $newHash, $student['StudentID']);
+            $update->execute();
+            $update->close();
+            $validPassword = true;
+        }
+
+        if ($validPassword) {
 
             login_user(
                 (int) $student['StudentID'],
@@ -47,7 +62,7 @@ if ($login_type === 'student') {
                 $student['LastName'] ?? ''
             );
 
-            header("Location: dashboard.php");
+            header("Location: reserve.php");
             exit;
 
         } else {
