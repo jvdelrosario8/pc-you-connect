@@ -115,24 +115,6 @@ if ($result) {
     }
     .announce-full-item:last-child { border-bottom: none; padding-bottom: 6px; }
 
-    /* thumbnail */
-    .af-thumb {
-      width: 80px;
-      height: 70px;
-      border-radius: 10px;
-      border: 1.5px dashed var(--thumb-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      flex-shrink: 0;
-      gap: 4px;
-      color: var(--thumb-icon);
-      text-align: center;
-    }
-    .af-thumb svg  { width: 18px; height: 18px; }
-    .af-thumb span { font-size: 8px; font-weight: 700; letter-spacing: .03em; line-height: 1.3; }
-
     /* body */
     .af-body { flex: 1; min-width: 0; }
     .af-meta  {
@@ -503,12 +485,6 @@ if ($result) {
 
         <?php foreach ($announcements as $a): ?>
         <div class="announce-full-item" data-tag="<?php echo $a['tag']; ?>">
-
-          <!-- thumbnail -->
-          <div class="af-thumb">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M8 6l1.5-2.5h5L16 6"/><circle cx="12" cy="13" r="3.2"/></svg>
-            <span>IMAGE<br>GOES HERE</span>
-          </div>
 
           <!-- body -->
           <div class="af-body">

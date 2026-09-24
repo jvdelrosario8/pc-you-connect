@@ -1,10 +1,67 @@
 <?php
 require_once 'auth.php';
+require_once 'db.php';
 require_admin();
 $adminID = current_user_id();
 $firstName = $_SESSION['first_name'] ?? 'Admin';
 $lastName = $_SESSION['last_name'] ?? '';
 $fullName = trim($firstName . ' ' . $lastName);
+
+function dashboardTimeAgo($timestamp)
+{
+  $seconds = max(0, time() - strtotime($timestamp));
+  if ($seconds < 60) return 'just now';
+  if ($seconds < 3600) return floor($seconds / 60) . ' min ago';
+  if ($seconds < 86400) {
+    $hours = floor($seconds / 3600);
+    return $hours . ($hours === 1 ? ' hr ago' : ' hrs ago');
+  }
+  $days = floor($seconds / 86400);
+  return $days . ($days === 1 ? ' day ago' : ' days ago');
+}
+
+$announcementCount = 0;
+$recentAnnouncements = [];
+$announcementCountResult = $conn->query("SELECT COUNT(*) AS total FROM announcements");
+if ($announcementCountResult) {
+  $announcementCount = (int) $announcementCountResult->fetch_assoc()['total'];
+}
+$recentAnnouncementsResult = $conn->query(
+  "SELECT category, title, content, created_at
+   FROM announcements
+   ORDER BY created_at DESC
+   LIMIT 3"
+);
+if ($recentAnnouncementsResult) {
+  while ($row = $recentAnnouncementsResult->fetch_assoc()) {
+    $recentAnnouncements[] = $row;
+  }
+}
+
+$lostFoundTotal = 0;
+$lostFoundPending = 0;
+$lostFoundStatsResult = $conn->query(
+  "SELECT COUNT(*) AS total,
+          COALESCE(SUM(status = 'unclaimed'), 0) AS pending
+   FROM lost_found"
+);
+if ($lostFoundStatsResult) {
+  $lostFoundStats = $lostFoundStatsResult->fetch_assoc();
+  $lostFoundTotal = (int) $lostFoundStats['total'];
+  $lostFoundPending = (int) $lostFoundStats['pending'];
+}
+$recentLostFound = [];
+$recentLostFoundResult = $conn->query(
+  "SELECT item_name, location, status, created_at
+   FROM lost_found
+   ORDER BY created_at DESC
+   LIMIT 3"
+);
+if ($recentLostFoundResult) {
+  while ($row = $recentLostFoundResult->fetch_assoc()) {
+    $recentLostFound[] = $row;
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -178,9 +235,9 @@ $fullName = trim($firstName . ' ' . $lastName);
                 <circle cx="12" cy="12.5" r="2.3" />
               </svg>
             </div>
-            <span class="badge yellow">3 pending</span>
+            <span class="badge yellow"><?php echo $lostFoundPending; ?> pending</span>
           </div>
-          <div class="stat-number">11</div>
+          <div class="stat-number"><?php echo $lostFoundTotal; ?></div>
           <div class="stat-label">Lost &amp; Found Items</div>
         </div>
 
@@ -192,9 +249,9 @@ $fullName = trim($firstName . ' ' . $lastName);
                 <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
               </svg>
             </div>
-            <span class="badge purple">4 new</span>
+            <span class="badge purple">LIVE</span>
           </div>
-          <div class="stat-number">7</div>
+          <div class="stat-number"><?php echo $announcementCount; ?></div>
           <div class="stat-label">Announcements</div>
         </div>
       </div>
@@ -210,73 +267,21 @@ $fullName = trim($firstName . ' ' . $lastName);
             </span>
           </div>
           <div class="announce-list">
-
+            <?php foreach ($recentAnnouncements as $announcement): ?>
             <a href="announcements.php" class="announce-item" data-transition>
-              <div class="announce-thumb">
-                <div class="thumb-inner">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                    <rect x="3" y="6" width="18" height="14" rx="2" />
-                    <path d="M8 6l1.5-2.5h5L16 6" />
-                    <circle cx="12" cy="13" r="3.2" />
-                  </svg>
-                  <span>IMAGE GOES<br>HERE</span>
-                </div>
-              </div>
               <div class="announce-body">
                 <div class="announce-meta">
-                  <span class="tag important">IMPORTANT</span>
-                  <span class="time-ago">2 hours ago</span>
+                  <span class="tag <?php echo htmlspecialchars($announcement['category'], ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars(strtoupper($announcement['category']), ENT_QUOTES, 'UTF-8'); ?></span>
+                  <span class="time-ago"><?php echo dashboardTimeAgo($announcement['created_at']); ?></span>
                 </div>
-                <h3 class="announce-title">Prelim Exam Schedule Released for INFT Courses</h3>
-                <p class="announce-desc">The prelim examination schedule for all INFT courses has been finalized. Please
-                  check your respective sections and reporting times.</p>
+                <h3 class="announce-title"><?php echo htmlspecialchars($announcement['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                <p class="announce-desc"><?php echo htmlspecialchars($announcement['content'], ENT_QUOTES, 'UTF-8'); ?></p>
               </div>
             </a>
-
-            <a href="announcements.php" class="announce-item" data-transition>
-              <div class="announce-thumb">
-                <div class="thumb-inner">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                    <rect x="3" y="6" width="18" height="14" rx="2" />
-                    <path d="M8 6l1.5-2.5h5L16 6" />
-                    <circle cx="12" cy="13" r="3.2" />
-                  </svg>
-                  <span>IMAGE GOES<br>HERE</span>
-                </div>
-              </div>
-              <div class="announce-body">
-                <div class="announce-meta">
-                  <span class="tag event">EVENT</span>
-                  <span class="time-ago">5 hours ago</span>
-                </div>
-                <h3 class="announce-title">Campus Tech Fair 2026 — Call for Booth Registrations</h3>
-                <p class="announce-desc">Register your student organization for a booth at the annual Tech Fair
-                  happening on October 15 at the PCU Gymnasium.</p>
-              </div>
-            </a>
-
-            <a href="announcements.php" class="announce-item" data-transition>
-              <div class="announce-thumb">
-                <div class="thumb-inner">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                    <rect x="3" y="6" width="18" height="14" rx="2" />
-                    <path d="M8 6l1.5-2.5h5L16 6" />
-                    <circle cx="12" cy="13" r="3.2" />
-                  </svg>
-                  <span>IMAGE GOES<br>HERE</span>
-                </div>
-              </div>
-              <div class="announce-body">
-                <div class="announce-meta">
-                  <span class="tag maintenance">MAINTENANCE</span>
-                  <span class="time-ago">1 day ago</span>
-                </div>
-                <h3 class="announce-title">Library HVAC System Maintenance — Sept 20-21</h3>
-                <p class="announce-desc">The main library will have limited operations due to scheduled HVAC
-                  maintenance. Study areas on the 2nd floor remain open.</p>
-              </div>
-            </a>
-
+            <?php endforeach; ?>
+            <?php if (!$recentAnnouncements): ?>
+            <div class="empty-state">No announcements yet.</div>
+            <?php endif; ?>
           </div>
         </div>
 
@@ -339,49 +344,24 @@ $fullName = trim($firstName . ' ' . $lastName);
             </a>
           </div>
 
-          <div class="list-row">
-            <div class="row-icon pink">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <circle cx="12" cy="12" r="7" />
-                <path d="M12 9v3l2 1.5" />
-                <path d="M9 3h6M9 21h6" />
-              </svg>
-            </div>
-            <div class="row-body">
-              <div class="row-title">Silver Watch</div>
-              <div class="row-sub">Found near women's comfort room • 3 hrs ago</div>
-            </div>
-            <span class="pill unclaimed">UNCLAIMED</span>
-          </div>
-
-          <div class="list-row">
-            <div class="row-icon purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <rect x="3" y="5" width="18" height="14" rx="2" />
-                <circle cx="9" cy="12" r="2.2" />
-                <path d="M14 10h4M14 14h4" />
-              </svg>
-            </div>
-            <div class="row-body">
-              <div class="row-title">Student ID Card</div>
-              <div class="row-sub">Found at JHS building hallway • 2 days ago</div>
-            </div>
-            <span class="pill unclaimed">UNCLAIMED</span>
-          </div>
-
+          <?php foreach ($recentLostFound as $lostFound): ?>
           <div class="list-row">
             <div class="row-icon blue">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <rect x="4" y="4" width="16" height="11" rx="1.5" />
-                <path d="M2 19h20l-1.5-3H3.5L2 19Z" stroke-linejoin="round" />
+                <path d="M4 6h16M4 6l1.5 13a2 2 0 0 0 2 1.8h9a2 2 0 0 0 2-1.8L20 6M9 6V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V6" />
+                <path d="M9.5 11.5h5" />
               </svg>
             </div>
             <div class="row-body">
-              <div class="row-title">Blue Laptop Charger</div>
-              <div class="row-sub">Found at ComLab 11 • 1 day ago</div>
+              <div class="row-title"><?php echo htmlspecialchars($lostFound['item_name'], ENT_QUOTES, 'UTF-8'); ?></div>
+              <div class="row-sub"><?php echo htmlspecialchars($lostFound['location'] ?: 'Location not provided', ENT_QUOTES, 'UTF-8'); ?> &bull; <?php echo dashboardTimeAgo($lostFound['created_at']); ?></div>
             </div>
-            <span class="pill claimed">CLAIMED</span>
+            <span class="pill <?php echo $lostFound['status'] === 'turned in' ? 'completed' : htmlspecialchars($lostFound['status'], ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars(strtoupper($lostFound['status']), ENT_QUOTES, 'UTF-8'); ?></span>
           </div>
+          <?php endforeach; ?>
+          <?php if (!$recentLostFound): ?>
+          <div class="empty-state">No Lost &amp; Found items yet.</div>
+          <?php endif; ?>
         </div>
 
         <div class="card panel">

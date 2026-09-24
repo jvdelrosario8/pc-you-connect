@@ -83,6 +83,7 @@ if ($result) {
           Announcements
         </a>
       </li>
+    </ul>
 
     <div class="nav-section-label">ACCOUNT</div>
     <ul class="nav-list">
