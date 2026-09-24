@@ -94,13 +94,13 @@
                 <input type="hidden" name="login_type" value="student">
                 <label for="studentID">Student Number</label>
                 <div class="input-wrap">
-                    <span class="input-icon"></span>
+                    <span class="input-icon" aria-hidden="true"><i class="fa-solid fa-user"></i></span>
                     <input id="studentID" name="studentID" type="text" placeholder="Enter your Student Number" required>
                 </div>
 
                 <label for="studentPassword">Password</label>
                 <div class="input-wrap">
-                    <span class="input-icon"></span>
+                    <span class="input-icon" aria-hidden="true"><i class="fa-solid fa-lock"></i></span>
 
                     <input id="studentPassword" name="password" type="password" placeholder="Enter your password"
                         required>
@@ -126,13 +126,13 @@
                 <input type="hidden" name="login_type" value="admin">
                 <label for="userID">User ID</label>
                 <div class="input-wrap">
-                    <span class="input-icon"></span>
+                    <span class="input-icon" aria-hidden="true"><i class="fa-solid fa-user"></i></span>
                     <input id="userID" name="userID" type="text" placeholder="Enter your User ID" required>
                 </div>
 
                 <label for="adminPassword">Password</label>
                 <div class="input-wrap">
-                    <span class="input-icon"></span>
+                    <span class="input-icon" aria-hidden="true"><i class="fa-solid fa-lock"></i></span>
 
                     <input id="adminPassword" name="password" type="password" placeholder="Enter your password"
                         required>
